@@ -1,0 +1,33 @@
+to run this app - pnpm dev
+
+// Important Links 👇👇👇👇
+https://huggingface.co/spaces/Harsh123007/harshal-portfolio-ai/tree/main
+https://harsh123007-harshal-portfolio-ai.hf.space/docs
+
+
+// website for reference 
+https://www.toukoum.fr/
+https://github.com/toukoum/portfolio
+
+
+{
+  "messages": [
+    { "role": "user", "content": "Your are currently working in which company?" }
+  ]
+}
+
+
+
+1) “Help me replace avatar now”
+
+→ I will guide you through memoji replacement + assets.
+
+2) “Give me full final polish now”
+
+→ I will refine everything (spacing, animations, responsiveness, transitions).
+
+3) “Add extra features”
+
+→ typing indicator, dark mode, fun commands, etc.
+
+
