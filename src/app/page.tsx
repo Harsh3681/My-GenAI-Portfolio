@@ -55,7 +55,7 @@ export default function Home() {
       ease: 'easeOut',
     },
   },
-};
+} satisfies Variants;
 
 const bottomElementVariants: Variants = {
   hidden: { opacity: 0, y: 80 },
