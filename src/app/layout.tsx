@@ -77,13 +77,13 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
         <link rel="icon" href="/favicon.png" sizes="any" />
-        <Script
+        {/* <Script
           defer
           data-website-id="68e067ba369b1b7f1f096056"
           data-domain="toukoum.fr"
           data-allow-localhost="true"
           src="https://datafa.st/js/script.js"
-        ></Script>
+        ></Script> */}
       </head>
 
       <body

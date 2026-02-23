@@ -166,7 +166,7 @@ What about you? What brings you here? 🙂`,
         image: "/projects/portfolio.png",
         liveUrl: undefined,
         description:
-          "Toukoum-style portfolio: instant static answers with AI-like typing animations (optional LLM later).",
+          "GenAI portfolio: instant static answers with AI-like typing animations (optional LLM later).",
         stack: ["Next.js", "Framer Motion", "Tailwind", "FastAPI (optional)"],
         screenshots: [],
       },
@@ -208,7 +208,6 @@ What about you? What brings you here? 🙂`,
     question: "What are your skills? Give me a list of soft and hard skills.",
     heading: "Skills & Expertise",
 
-    // Toukoum-like sections with chips
     sections: [
       {
         title: "Frontend Development",
