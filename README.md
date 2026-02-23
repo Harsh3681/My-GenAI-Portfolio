@@ -6,17 +6,17 @@ A modern, interactive portfolio website built with Next.js featuring an intellig
 
 ### Home Page
 
-![Home Page Screenshot](public/screenshots/home.png)
+![Home Page Screenshot](public/projects/portfolio/pf1.png)
 _Screenshot coming soon_
 
 ### AI Chat Interface
 
-![Chat Interface](public/screenshots/chat.png)
+![Chat Interface](public/projects/portfolio/pf2.png)
 _Screenshot coming soon_
 
 ### Projects Showcase
 
-![Projects](public/screenshots/projects.png)
+![Projects](public/projects/portfolio/pf4.png)
 _Screenshot coming soon_
 
 ---
