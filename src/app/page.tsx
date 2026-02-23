@@ -2,7 +2,7 @@
 
 import FluidCursor from '@/components/FluidCursor';
 import { Button } from '@/components/ui/button';
-import { motion, Variants } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import {
   ArrowRight,
   BriefcaseBusiness,
@@ -50,20 +50,25 @@ export default function Home() {
     opacity: 1,
     y: 0,
     transition: {
-      type: 'tween',
+      type: 'tween' as const,
       duration: 0.6,
       ease: 'easeOut',
     },
   },
 };
-  const bottomElementVariants: Variants = {
-    hidden: { opacity: 0, y: 80 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: 'tween', duration: 0.8, delay: 0.2 },
+
+const bottomElementVariants: Variants = {
+  hidden: { opacity: 0, y: 80 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'tween' as const,
+      duration: 0.8,
+      delay: 0.2,
     },
-  };
+  },
+};
 
   useEffect(() => {
     const img = new window.Image();
