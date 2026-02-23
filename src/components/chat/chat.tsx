@@ -134,9 +134,20 @@ export default function Chat() {
   const [headerH, setHeaderH] = useState(0);
 
   const stopSpeech = () => {
+    if (typeof window === 'undefined') return;
+
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
+
+    // extra safety: clear any current utterance hooks
+    if (utteranceRef.current) {
+      utteranceRef.current.onend = null;
+      utteranceRef.current.onerror = null;
+      utteranceRef.current.onstart = null;
+      utteranceRef.current = null;
+    }
+
     setIsTalking(false);
   };
 
@@ -385,7 +396,7 @@ export default function Chat() {
     setCurrentQuestion(question);
     setActiveTab('custom');
 
-    // show dots immediately
+    // show dots immediately and KEEP until reply arrives
     setCustomAnswer('');
     setRevealedTab('custom');
     setIsTyping(true);
@@ -395,152 +406,70 @@ export default function Chat() {
       scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // --- streaming buffers ---
-    let targetText = ''; // full accumulated answer (keeps growing)
-    let visibleText = ''; // what we show (typewriter)
-    let startedReveal = false;
+    let targetText = '';
+    let visibleText = '';
     let done = false;
 
-    // reveal starts after 1.2s (your “ChatGPT feel”)
-    const revealTimer = window.setTimeout(() => {
-      startedReveal = true;
-      setIsTyping(false); // hide dots, start showing answer
-      setIsTalking(true); // memoji talking starts when answer starts revealing
-      videoRef.current?.play().catch(() => null);
-    }, 1200);
-
-    // typewriter loop (30ms per char feels good)
+    // typewriter loop
     const revealInterval = window.setInterval(() => {
-      if (!startedReveal) return;
+      if (isTyping) return; // don't type while dots are showing
 
       if (visibleText.length < targetText.length) {
-        // reveal next character
         visibleText += targetText.charAt(visibleText.length);
         setCustomAnswer(visibleText);
         return;
       }
 
-      // if stream finished AND we revealed everything -> stop talking
       if (done && visibleText.length >= targetText.length) {
         window.clearInterval(revealInterval);
         setIsTalking(false);
       }
-    }, 30);
+    }, 25);
 
     try {
       const res = await fetch('/api/harshal-chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'text/event-stream',
+          Accept: 'application/json',
         },
         body: JSON.stringify({
           messages: [{ role: 'user', content: question }],
+          stream: false,
         }),
       });
 
-      const ct = res.headers.get('content-type') || '';
-      if (ct.includes('application/json')) {
-        const data = await res.json();
-        targetText = (data?.reply || '').toString();
+      const data = await res.json().catch(() => ({}));
+      targetText = String(data?.reply ?? '').trim();
 
-        done = true;
-
-        if (!targetText.trim()) {
-          targetText = "Sorry — I couldn't answer that right now.";
-        }
-
-        if (voiceMode && targetText.trim()) {
-          setTimeout(() => speak(targetText), 250);
-        }
-
-        return; // stop here, no SSE reader
-      }
-
-      if (!res.ok) {
-        const t = await res.text();
-        throw new Error(t || 'Request failed');
-      }
-
-      if (!res.body) throw new Error('No stream body');
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder('utf-8');
-
-      // ✅ IMPORTANT: SSE parsing needs a rolling buffer
-      let buffer = '';
-
-      while (true) {
-        const { done: readerDone, value } = await reader.read();
-        if (readerDone) break;
-
-        buffer += decoder.decode(value, { stream: true });
-
-        // SSE events are separated by blank line
-        const events = buffer.split('\n\n');
-        buffer = events.pop() ?? ''; // keep remainder for next read
-
-        for (const evt of events) {
-          // each event can have multiple lines; we care about "data:"
-          const lines = evt.split('\n');
-          for (const line of lines) {
-            if (!line.startsWith('data:')) continue;
-
-            const data = line.slice(5).trimStart(); // keep exact spacing after "data:"
-            if (!data) continue;
-
-            if (data.trim() === '[DONE]') {
-              done = true;
-              break;
-            }
-
-            // append streamed chunk as-is (no extra space!)
-            targetText += data;
-          }
-          if (done) break;
-        }
-
-        if (done) break;
-      }
-
-      // mark done, ensure fallback if empty
-      done = true;
-      if (!targetText.trim()) {
-        targetText = "Sorry — I couldn't answer that right now.";
-      }
-
-      // speak only after full answer available
-      if (voiceMode && targetText.trim()) {
-        // wait a moment so UI doesn’t feel glitchy
-        setTimeout(() => speak(targetText), 250);
-      }
+      if (!targetText) targetText = "Sorry — I couldn't answer that right now.";
     } catch (e) {
-      done = true;
       targetText = "Sorry — I couldn't answer that right now.";
     } finally {
-      // cleanup
-      window.clearTimeout(revealTimer);
+      done = true;
 
-      // If reveal never started (fast response) start it now
-      if (!startedReveal) {
-        startedReveal = true;
-        setIsTyping(false);
-        setIsTalking(true);
-        videoRef.current?.play().catch(() => null);
+      // ✅ hide dots ONLY once we have final text ready
+      setIsTyping(false);
+      setIsTalking(true);
+      videoRef.current?.play().catch(() => null);
+
+      // ✅ speak only after full text is ready
+      if (voiceMode && targetText.trim()) {
+        setTimeout(() => speak(targetText), 200);
       }
 
-      // allow reveal loop to finish naturally, but ensure it eventually ends
-      // (in case interval got stuck)
+      // safety stop
       setTimeout(() => {
         if (done && visibleText.length >= targetText.length) {
           setIsTalking(false);
         }
-      }, 2000);
+      }, 2500);
     }
   };
   // ----------------------------------
 
   const triggerTab = (tab: TabType) => {
+    stopSpeech(); // ✅ stop voice when switching static tabs
     const q = portfolioContent[tab].question;
 
     setActiveTab(tab);
@@ -1166,11 +1095,12 @@ export default function Chat() {
 
               {/* Answer bubble (LEFT) */}
               <AnimatePresence mode="wait">
-                {!isTyping && (
-                  <motion.div key={revealedTab + '-answer'} {...MOTION}>
-                    <Bubble side="left">{renderAnswer()}</Bubble>
-                  </motion.div>
-                )}
+                {!isTyping &&
+                  (revealedTab !== 'custom' || customAnswer.length > 0) && (
+                    <motion.div key={revealedTab + '-answer'} {...MOTION}>
+                      <Bubble side="left">{renderAnswer()}</Bubble>
+                    </motion.div>
+                  )}
               </AnimatePresence>
             </div>
           </div>
@@ -1242,6 +1172,7 @@ export default function Chat() {
                       whileHover={{ y: -2 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => {
+                        stopSpeech();
                         const t =
                           activeTab === 'custom'
                             ? 'me'
@@ -1340,6 +1271,7 @@ export default function Chat() {
                           <button
                             key={q}
                             onClick={() => {
+                              stopSpeech();
                               setQuestionSheetOpen(false);
                               askRag(q);
                             }}

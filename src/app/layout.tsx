@@ -55,11 +55,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/favicon.svg',
+        url: '/favicon.png',
         sizes: 'any',
       },
     ],
-    shortcut: '/favicon.svg?v=2',
+    shortcut: '/favicon.png?v=2',
     apple: '/apple-touch-icon.svg?v=2',
   },
 };
@@ -76,7 +76,7 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
-        <link rel="icon" href="/favicon.svg" sizes="any" />
+        <link rel="icon" href="/favicon.png" sizes="any" />
         <Script
           defer
           data-website-id="68e067ba369b1b7f1f096056"
