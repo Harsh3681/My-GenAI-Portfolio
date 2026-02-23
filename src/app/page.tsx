@@ -2,7 +2,7 @@
 
 import FluidCursor from '@/components/FluidCursor';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import {
   ArrowRight,
   BriefcaseBusiness,
@@ -44,15 +44,19 @@ export default function Home() {
     return router.push(`/chat?query=${encodeURIComponent(query)}`);
   };
 
-  const topElementVariants = {
-    hidden: { opacity: 0, y: -60 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: 'tween', duration: 0.8 },
+  const topElementVariants: Variants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'tween',
+      duration: 0.6,
+      ease: 'easeOut',
     },
-  };
-  const bottomElementVariants = {
+  },
+};
+  const bottomElementVariants: Variants = {
     hidden: { opacity: 0, y: 80 },
     visible: {
       opacity: 1,

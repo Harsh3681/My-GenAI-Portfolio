@@ -3,7 +3,14 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { AnimatePresence, motion, easeOut, LayoutGroup } from 'framer-motion';
+import {
+  AnimatePresence,
+  LayoutGroup,
+  easeOut,
+  motion,
+  type Transition,
+  type Variants,
+} from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { createPortal } from 'react-dom';
 import {
@@ -18,11 +25,16 @@ import {
 import ChatBottombar from '@/components/chat/chat-bottombar';
 import { portfolioContent, TabType } from '@/data/content';
 
-const MOTION = {
+const MOTION: {
+  initial: { opacity: number; y: number };
+  animate: { opacity: number; y: number };
+  exit: { opacity: number; y: number };
+  transition: Transition;
+} = {
   initial: { opacity: 0, y: 14 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 14 },
-  transition: { duration: 0.28, ease: easeOut },
+  transition: { type: 'tween', duration: 0.28, ease: easeOut },
 };
 
 const ClientOnly = ({ children }: { children: React.ReactNode }) => {
@@ -1221,7 +1233,7 @@ export default function Chat() {
                       animate={{ y: 0, opacity: 1 }}
                       exit={{ y: 40, opacity: 0 }}
                       transition={{
-                        type: 'spring',
+                        type: 'spring' as const,
                         stiffness: 140,
                         damping: 18,
                       }}
@@ -1319,7 +1331,7 @@ export default function Chat() {
                           animate={{ borderRadius: 24 }}
                           exit={{ scale: 0.95, opacity: 0 }}
                           transition={{
-                            type: 'spring',
+                            type: 'spring' as const,
                             stiffness: 120,
                             damping: 20,
                           }}
