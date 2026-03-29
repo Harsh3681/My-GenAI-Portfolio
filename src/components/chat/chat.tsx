@@ -25,6 +25,11 @@ import {
 import ChatBottombar from '@/components/chat/chat-bottombar';
 import { portfolioContent, TabType } from '@/data/content';
 
+const isIOS = () => {
+  if (typeof window === 'undefined') return false;
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+};
+
 const MOTION: {
   initial: { opacity: number; y: number };
   animate: { opacity: number; y: number };
@@ -956,14 +961,14 @@ export default function Chat() {
             </div>
 
             {/* Hero title */}
-            {f.heroTitle && (
+            {f.heroTitle ? (
               <div className="text-lg font-medium text-zinc-800 dark:text-zinc-200">
                 {f.heroTitle}
               </div>
-            )}
+            ) : null}
 
-            {/* Image */}
-            {f.image && (
+            {/* Main image */}
+            {f.image ? (
               <div className="overflow-hidden rounded-3xl border border-black/5 dark:border-white/10">
                 <img
                   src={f.image}
@@ -971,15 +976,15 @@ export default function Chat() {
                   className="w-full object-cover"
                 />
               </div>
-            )}
+            ) : null}
 
-            {/* Story OR fallback content */}
+            {/* Story */}
             <div className="text-sm leading-relaxed whitespace-pre-line text-zinc-800 dark:text-zinc-200">
-              {f.story || f.content}
+              {f.story}
             </div>
 
             {/* Hobbies */}
-            {f.hobbies && f.hobbies.length > 0 && (
+            {f.hobbies && f.hobbies.length > 0 ? (
               <div className="space-y-2">
                 <div className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                   {f.hobbiesTitle || 'What I enjoy'}
@@ -996,14 +1001,14 @@ export default function Chat() {
                   ))}
                 </div>
               </div>
-            )}
+            ) : null}
 
             {/* Closing */}
-            {f.closing && (
+            {f.closing ? (
               <div className="text-sm text-zinc-700 dark:text-zinc-300">
                 {f.closing}
               </div>
-            )}
+            ) : null}
           </div>
         );
       }

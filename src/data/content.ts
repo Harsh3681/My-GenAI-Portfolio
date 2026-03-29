@@ -261,28 +261,18 @@ What about you? What brings you here? 🙂`,
   fun: {
   question: "What's the craziest thing you've done or what do you do for fun?",
   heading: "Fun",
-
   heroTitle: "A little beyond code 👀",
   image: "/projects/camping.png",
-  imageAlt: "Harshal camping near a lake",
+  imageAlt: "Camping / outdoor moment",
+  story: `Outside of work, I enjoy experiences that help me disconnect from screens and recharge mentally.
 
-  story: `I enjoy experiences that feel real, not just things that sound impressive.
+One of the things I really enjoy is spending time outdoors — whether that’s traveling, exploring new places, or simply enjoying calm moments away from the usual work routine.
 
-One of my favorite kinds of breaks is going on short trips and camping. Being away from screens, city noise, and constant notifications helps me reset and come back with better energy.
-
-I like simple adventures, good scenery, and moments that feel memorable. That balance keeps me fresh — both in life and in work.`,
-
-  hobbiesTitle: "What I enjoy outside work",
-  hobbies: [
-    "Camping and short trips",
-    "Exploring new places",
-    "Building side projects",
-    "Experimenting with UI ideas",
-    "Learning new tech for fun",
-  ],
-
+I like balancing deep technical work with real-life experiences, because I feel that keeps me creative, grounded, and energized.`,
+  hobbiesTitle: "What I enjoy",
+  hobbies: ["Travel", "Outdoors", "Exploring new places", "Photography", "Learning"],
   closing:
-    "So yeah — I love building software, but I also make time for real experiences and a bit of adventure 😄",
+    "So yeah — I love building software, but I also make time for real experiences and hobbies that keep me inspired.",
 },
 
   contact: {
