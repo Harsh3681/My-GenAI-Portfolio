@@ -931,16 +931,79 @@ export default function Chat() {
         );
       }
 
+      // case 'fun': {
+      //   const f = portfolioContent.fun;
+      //   return (
+      //     <div className="space-y-2">
+      //       <div className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
+      //         {f.heading}
+      //       </div>
+      //       <div className="text-sm leading-relaxed whitespace-pre-line text-zinc-800 dark:text-zinc-200">
+      //         {f.content}
+      //       </div>
+      //     </div>
+      //   );
+      // }
+
       case 'fun': {
         const f = portfolioContent.fun;
+
         return (
-          <div className="space-y-2">
+          <div className="space-y-6">
+            {/* Heading */}
             <div className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
               {f.heading}
             </div>
+
+            {/* Hero title */}
+            {f.heroTitle && (
+              <div className="text-lg font-medium text-zinc-800 dark:text-zinc-200">
+                {f.heroTitle}
+              </div>
+            )}
+
+            {/* Image */}
+            {f.image && (
+              <div className="overflow-hidden rounded-3xl border border-black/5 dark:border-white/10">
+                <img
+                  src={f.image}
+                  alt={f.imageAlt || 'Fun image'}
+                  className="w-full object-cover"
+                />
+              </div>
+            )}
+
+            {/* Story OR fallback content */}
             <div className="text-sm leading-relaxed whitespace-pre-line text-zinc-800 dark:text-zinc-200">
-              {f.content}
+              {f.story || f.content}
             </div>
+
+            {/* Hobbies */}
+            {f.hobbies && f.hobbies.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                  {f.hobbiesTitle || 'What I enjoy'}
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {f.hobbies.map((h: string, i: number) => (
+                    <span
+                      key={i}
+                      className="rounded-full bg-black/5 px-3 py-1 text-xs text-zinc-800 dark:bg-white/10 dark:text-zinc-100"
+                    >
+                      {h}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Closing */}
+            {f.closing && (
+              <div className="text-sm text-zinc-700 dark:text-zinc-300">
+                {f.closing}
+              </div>
+            )}
           </div>
         );
       }

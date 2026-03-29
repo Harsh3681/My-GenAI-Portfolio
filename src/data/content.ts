@@ -259,13 +259,31 @@ What about you? What brings you here? 🙂`,
   },
 
   fun: {
-    question: "Tell me something fun about you.",
-    heading: "Fun",
-    content: `I like building things that feel “wow” — especially smooth UI interactions and clean backend systems.
-I’m also the type of person who enjoys debugging tricky issues and turning slow apps into fast ones.
+  question: "What's the craziest thing you've done or what do you do for fun?",
+  heading: "Fun",
 
-When I’m not coding, I’m usually learning something new or improving my personal projects.`,
-  },
+  heroTitle: "A little beyond code 👀",
+  image: "/projects/camping.png",
+  imageAlt: "Harshal camping near a lake",
+
+  story: `I enjoy experiences that feel real, not just things that sound impressive.
+
+One of my favorite kinds of breaks is going on short trips and camping. Being away from screens, city noise, and constant notifications helps me reset and come back with better energy.
+
+I like simple adventures, good scenery, and moments that feel memorable. That balance keeps me fresh — both in life and in work.`,
+
+  hobbiesTitle: "What I enjoy outside work",
+  hobbies: [
+    "Camping and short trips",
+    "Exploring new places",
+    "Building side projects",
+    "Experimenting with UI ideas",
+    "Learning new tech for fun",
+  ],
+
+  closing:
+    "So yeah — I love building software, but I also make time for real experiences and a bit of adventure 😄",
+},
 
   contact: {
     question: "How can I contact you?",
